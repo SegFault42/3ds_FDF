@@ -63,7 +63,7 @@ LIBS	:= -lsf2d -lcitro3d -lctru -lm
 LIBDIRS	:= $(CTRULIB)
 #LIBDIRS	:= $(DEVKITPRO)/libsf2d/include/sf2d.h
 
-#LIBDIRS += ./include/fdf.h
+#LIBDIRS += ~/Documents/3ds_homebrew_dev/devkitPro/
 
 
 #---------------------------------------------------------------------------------
