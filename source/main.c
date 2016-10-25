@@ -8,6 +8,12 @@ static void	init_t_fdf_struct(t_env *env)
 	env->left_or_right = 0;
 	env->y_point = 0;
 	env->x_point = 0;
+	env->x1 = 1;
+	env->x2 = 1;
+	env->y1 = 1;
+	env->y2 = 1;
+	env->gap = 20;
+	env->speed = 1;
 	return ;
 }
 
@@ -32,8 +38,7 @@ void	select_map(t_env *env)
 		env->iter_tab = env->size_tab -1;
 	else if (env->iter_tab >= env->size_tab)
 		env->iter_tab = 0;
-	printf("                           \r");
-	printf(BRED"%s\r"END, env->tab[env->iter_tab]);
+	printf(BRED"%s\n"END, env->tab[env->iter_tab]);
 }
 
 int		parse_map(t_env *env)
@@ -78,30 +83,6 @@ int		parse_map(t_env *env)
 	return (EXIT_SUCCESS);
 }
 
-void	draw_grille(t_env *env)
-{
-	int	tmp_x_point = env->x_point;
-	int	tmp_y_point = env->y_point;
-	int	x1 = 0, x2 = 0, y1 = 0, y2 = 0;
-	int	gap = 10;
-	int	size_grille_x = 300;
-	int	size_grille_y = gap * env->y_point;
-
-	while (tmp_y_point > 0)
-	{
-		tmp_x_point = env->x_point;
-		while (tmp_x_point > 0)
-		{
-			sf2d_draw_rectangle(x1, y1, 1, 1, RGBA8(255, 255, 0, 255));
-			x1 += gap;
-			tmp_x_point--;
-			printf("debug\n");
-		}
-		x1 = 0;
-		y1 += gap;
-		tmp_y_point--;
-	}
-}
 
 int main()
 {
@@ -113,7 +94,7 @@ int main()
 
 	init_t_fdf_struct(&env);
 	sf2d_init();
-	sf2d_set_3D(0);
+	sf2d_set_3D(1);
 	sf2d_set_clear_color(RGBA8(0x0, 0x00, 0x00, 0xFF));
 	consoleInit(GFX_BOTTOM, &bot_screen); //Init bottom screen
 
@@ -125,30 +106,89 @@ int main()
 		hidScanInput();
 		k_held = hidKeysHeld();
 		k_down = hidKeysDown();
+		if (k_held & KEY_CSTICK_UP)
+		{
+			env.gap++;
+			if (env.gap <= 0)
+				env.gap = 1;
+		}
+		if (k_held & KEY_CSTICK_DOWN)
+		{
+			env.gap--;
+			if (env.gap <= 0)
+				env.gap = 1;
+		}
+
+		if (k_held & KEY_CPAD_LEFT)
+		{
+			env.x1 -= env.speed;
+			env.x2 -= env.speed;
+		}
+		if (k_held & KEY_CPAD_RIGHT)
+		{
+			env.x1 += env.speed;
+			env.x2 += env.speed;
+		}
+		if (k_held & KEY_CPAD_UP)
+		{
+			env.y1 -= env.speed;
+			env.y2 -= env.speed;
+		}
+		if (k_held & KEY_CPAD_DOWN)
+		{
+			env.y1 += env.speed;
+			env.y2 += env.speed;
+		}
 
 		if (k_held & KEY_START)
 			break;
 		if (k_down & KEY_DRIGHT)
 		{
+			consoleClear();
 			env.left_or_right = 1;
 			select_map(&env);
 		}
 		if (k_down & KEY_DLEFT)
 		{
+			consoleClear();
 			env.left_or_right = 0;
 			select_map(&env);
 		}
 		if (k_down & KEY_A)
 			draw = parse_map(&env);
+
+		if (k_down & KEY_R)
+		{
+			consoleClear();
+			printf("%d\n", env.speed);
+			env.speed++;
+			if (env.speed <= 0)
+				env.speed = 1;
+		}
+		if (k_down & KEY_L)
+		{
+			consoleClear();
+			printf("%d\n", env.speed);
+			env.speed--;
+			if (env.speed <= 0)
+				env.speed = 1;
+		}
+
 		if (draw == EXIT_SUCCESS)
 		{
 			sf2d_start_frame(GFX_TOP, GFX_LEFT);
-				draw_grille(&env);
+				draw_y_line(&env);
+				draw_x_line(&env);
+			sf2d_end_frame();
+
+			sf2d_start_frame(GFX_TOP, GFX_RIGHT);
+				draw_y_line(&env);
+				draw_x_line(&env);
 			sf2d_end_frame();
 		}
 
 		sf2d_swapbuffers();
-		/*sf2d_set_clear_color(RGBA8(0x40, 0x40, 0x40, 0xFF));*/
+		sf2d_set_clear_color(RGBA8(0x10, 0x10, 0x10, 0xFF));
 	}
 	sf2d_fini();
 	return 0;

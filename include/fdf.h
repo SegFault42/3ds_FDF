@@ -41,6 +41,8 @@
 
 # define END		"\033[0m"
 
+#define CONFIG_3D_SLIDERSTATE (*(float *)0x1FF81080)
+
 typedef struct		s_env
 {
 	char			**tab;
@@ -49,11 +51,22 @@ typedef struct		s_env
 	int				left_or_right;
 	int				y_point;
 	int				x_point;
+	int				x1;
+	int				x2;
+	int				y1;
+	int				y2;
+	int				gap;
+	int				speed;
 }					t_env;
 
 //int		get_next_line(int const fd, char **line);
 
 void	get_maps(t_env *env);
 int		count_file(t_env *env);
+
+//====================================draw.c===================================
+void	draw_y_line(t_env *env);
+void	draw_x_line(t_env *env);
+//=============================================================================
 
 #endif
