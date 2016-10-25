@@ -15,6 +15,9 @@
 
 #define BUFF_SIZE 32
 
+#define WIDTH_TOP 400
+#define HEIGHT_TOP 400
+
 # define BLACK		"\033[30m"
 # define RED		"\033[31m"
 # define GREEN		"\033[32m"
@@ -67,6 +70,11 @@ int		count_file(t_env *env);
 //====================================draw.c===================================
 void	draw_y_line(t_env *env);
 void	draw_x_line(t_env *env);
+//=============================================================================
+
+//====================================tools.c==================================
+void	print_tab(t_env *env);
+void	select_map(t_env *env);
 //=============================================================================
 
 #endif

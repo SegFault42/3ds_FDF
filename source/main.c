@@ -8,6 +8,10 @@ static void	init_t_fdf_struct(t_env *env)
 	env->left_or_right = 0;
 	env->y_point = 0;
 	env->x_point = 0;
+	/*env->x1 = WIDTH_TOP / 3;*/
+	/*env->x2 = WIDTH_TOP / 3;*/
+	/*env->y1 = HEIGHT_TOP / 3;*/
+	/*env->y2 = HEIGHT_TOP / 3;*/
 	env->x1 = 1;
 	env->x2 = 1;
 	env->y1 = 1;
@@ -17,29 +21,6 @@ static void	init_t_fdf_struct(t_env *env)
 	return ;
 }
 
-static void	print_tab(t_env *env)
-{
-	int	i = 0;
-
-	while (i < env->size_tab)
-	{
-		printf("%s\n", env->tab[i]);
-		++i;
-	}
-}
-
-void	select_map(t_env *env)
-{
-	if (env->left_or_right == 1)
-		++env->iter_tab;
-	else if (env->left_or_right == 0)
-		--env->iter_tab;
-	if (env->iter_tab == 0)
-		env->iter_tab = env->size_tab -1;
-	else if (env->iter_tab >= env->size_tab)
-		env->iter_tab = 0;
-	printf(BRED"%s\n"END, env->tab[env->iter_tab]);
-}
 
 int		parse_map(t_env *env)
 {
@@ -95,7 +76,7 @@ int main()
 	init_t_fdf_struct(&env);
 	sf2d_init();
 	sf2d_set_3D(1);
-	sf2d_set_clear_color(RGBA8(0x0, 0x00, 0x00, 0xFF));
+	/*sf2d_set_clear_color(RGBA8(0x0, 0x00, 0x00, 0xFF));*/
 	consoleInit(GFX_BOTTOM, &bot_screen); //Init bottom screen
 
 	get_maps(&env);
