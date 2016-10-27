@@ -3,21 +3,21 @@
 static void	init_t_fdf_struct(t_env *env)
 {
 	env->tab = NULL;
+	env->map = NULL;
 	env->size_tab = 0;
 	env->iter_tab = 0;
 	env->left_or_right = 0;
 	env->y_point = 0;
 	env->x_point = 0;
-	/*env->x1 = WIDTH_TOP / 3;*/
-	/*env->x2 = WIDTH_TOP / 3;*/
-	/*env->y1 = HEIGHT_TOP / 3;*/
-	/*env->y2 = HEIGHT_TOP / 3;*/
 	env->x1 = 1;
 	env->x2 = 1;
 	env->y1 = 1;
 	env->y2 = 1;
-	env->gap = 10;
+	env->gap = 1;
 	env->speed = 1;
+	env->level = 1;
+	env->origin_x = ORIGIN_X;
+	env->origin_y = ORIGIN_Y;
 	return ;
 }
 
@@ -58,12 +58,60 @@ int		parse_map(t_env *env)
 			env->x_point = i;
 		++env->y_point;
 		i = 0;
+		free(line);
+		while (split_line[i])
+		{
+			free(split_line[i]);
+			++i;
+		}
+		free(split_line);
+		i = 0;
 	}
 	close(fd);
 	free(map_name);
 	return (EXIT_SUCCESS);
 }
 
+void	get_z_point(t_env *env)
+{
+	int		fd;
+	char	**split_line;
+	int		i = 0;
+	int		j = 0;
+	int		i_split = 0;
+	char	*line;
+	char	*map_name = NULL;
+
+	map_name = (char *)malloc(sizeof(char) * (strlen(env->tab[env->iter_tab]) + 7));
+	strcpy(map_name, "./Maps/");
+	strcat(map_name, env->tab[env->iter_tab]);
+	if ((fd = open(map_name, O_RDONLY)) < 0)
+	{
+		printf("Opening map error !\n");
+		return (EXIT_FAILURE);
+	}
+	env->map = (int **)malloc(sizeof(int *) * env->y_point);
+	while (get_next_line(fd, &line) > 0)
+	{
+		split_line = ft_strsplit(line, ' ');
+		env->map[i] = (int *)malloc(sizeof(int) * env->x_point);
+		while (j < env->x_point)
+		{
+			env->map[i][j] = atoi(split_line[j]);
+			j++;
+		}
+		j = 0;
+		++i;
+		free(line);
+		while (split_line[i_split])
+		{
+			free(split_line[i_split]);
+			++i_split;
+		}
+		free(split_line);
+		i_split = 0;
+	}
+}
 
 int main()
 {
@@ -76,7 +124,7 @@ int main()
 	init_t_fdf_struct(&env);
 	sf2d_init_advanced(SF2D_GPUCMD_DEFAULT_SIZE, SF2D_TEMPPOOL_DEFAULT_SIZE);
 	sf2d_set_3D(0);
-	/*sf2d_set_clear_color(RGBA8(0x0, 0x00, 0x00, 0xFF));*/
+	sf2d_set_clear_color(RGBA8(0x0, 0x00, 0x00, 0xFF));
 	consoleInit(GFX_BOTTOM, &bot_screen); //Init bottom screen
 
 	get_maps(&env);
@@ -90,14 +138,26 @@ int main()
 		if (k_held & KEY_CSTICK_UP)
 		{
 			env.gap++;
+			env.level++;
 			if (env.gap <= 0)
+			{
 				env.gap = 1;
+				env.level == env.gap - 8;
+			}
+			if (env.level <= 1)
+				env.level = 1;
 		}
 		if (k_held & KEY_CSTICK_DOWN)
 		{
 			env.gap--;
+			env.level--;
 			if (env.gap <= 0)
+			{
 				env.gap = 1;
+				env.level == env.gap - 8;
+			}
+			if (env.level <= 1)
+				env.level = 1;
 		}
 
 		if (k_held & KEY_CPAD_LEFT)
@@ -123,6 +183,10 @@ int main()
 
 		if (k_held & KEY_START)
 			break;
+		if (k_down & KEY_ZR)
+			env.level++;
+		if (k_down & KEY_ZL)
+			env.level--;
 		if (k_down & KEY_DRIGHT)
 		{
 			consoleClear();
@@ -136,7 +200,10 @@ int main()
 			select_map(&env);
 		}
 		if (k_down & KEY_A)
+		{
 			draw = parse_map(&env);
+			get_z_point(&env);
+		}
 
 		if (k_down & KEY_R)
 		{

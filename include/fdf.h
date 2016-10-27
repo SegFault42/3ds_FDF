@@ -16,9 +16,9 @@
 #define BUFF_SIZE 32
 
 #define WIDTH_TOP 400
-#define HEIGHT_BOT 320
-#define ORIGIN_X (WIDTH_TOP / 3)
-#define ORIGIN_Y (HEIGHT_BOT / 8)
+#define HEIGHT_TOP 320
+#define ORIGIN_X (WIDTH_TOP / 2)
+#define ORIGIN_Y (HEIGHT_TOP / 2)
 
 # define BLACK		"\033[30m"
 # define RED		"\033[31m"
@@ -50,7 +50,8 @@
 
 typedef struct		s_env
 {
-	char			**tab;
+	char				**tab;
+	int				**map;
 	int				size_tab;
 	unsigned int	iter_tab;
 	int				left_or_right;
@@ -62,6 +63,9 @@ typedef struct		s_env
 	int				y2;
 	int				gap;
 	int				speed;
+	int				level;
+	int				origin_x;
+	int				origin_y;
 }					t_env;
 
 //int		get_next_line(int const fd, char **line);
