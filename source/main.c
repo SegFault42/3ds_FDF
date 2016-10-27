@@ -16,7 +16,7 @@ static void	init_t_fdf_struct(t_env *env)
 	env->x2 = 1;
 	env->y1 = 1;
 	env->y2 = 1;
-	env->gap = 20;
+	env->gap = 10;
 	env->speed = 1;
 	return ;
 }
@@ -74,8 +74,8 @@ int main()
 	int				draw = EXIT_FAILURE;
 
 	init_t_fdf_struct(&env);
-	sf2d_init();
-	sf2d_set_3D(1);
+	sf2d_init_advanced(SF2D_GPUCMD_DEFAULT_SIZE, SF2D_TEMPPOOL_DEFAULT_SIZE);
+	sf2d_set_3D(0);
 	/*sf2d_set_clear_color(RGBA8(0x0, 0x00, 0x00, 0xFF));*/
 	consoleInit(GFX_BOTTOM, &bot_screen); //Init bottom screen
 
@@ -162,10 +162,10 @@ int main()
 				draw_x_line(&env);
 			sf2d_end_frame();
 
-			sf2d_start_frame(GFX_TOP, GFX_RIGHT);
-				draw_y_line(&env);
-				draw_x_line(&env);
-			sf2d_end_frame();
+			/*sf2d_start_frame(GFX_TOP, GFX_RIGHT);*/
+				/*draw_y_line(&env);*/
+				/*draw_x_line(&env);*/
+			/*sf2d_end_frame();*/
 		}
 
 		sf2d_swapbuffers();

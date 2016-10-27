@@ -16,7 +16,9 @@
 #define BUFF_SIZE 32
 
 #define WIDTH_TOP 400
-#define HEIGHT_TOP 400
+#define HEIGHT_BOT 320
+#define ORIGIN_X (WIDTH_TOP / 3)
+#define ORIGIN_Y (HEIGHT_BOT / 8)
 
 # define BLACK		"\033[30m"
 # define RED		"\033[31m"
