@@ -66,6 +66,7 @@ typedef struct		s_env
 	int				level;
 	int				origin_x;
 	int				origin_y;
+	int				draw;
 }					t_env;
 
 //int		get_next_line(int const fd, char **line);
@@ -81,6 +82,12 @@ void	draw_x_line(t_env *env);
 //====================================tools.c==================================
 void	print_tab(t_env *env);
 void	select_map(t_env *env);
+void	ft_tab_free(char **tab);
 //=============================================================================
+void	c_stick(t_env *env, u32 *k_held);
+void	c_pad(t_env *env, u32 *k_held);
+void	d_pad(t_env *env, u32 *k_down);
+int		button(t_env *env, u32 *k_down);
+void	key_up(t_env *env, u32 *k_down);
 
 #endif

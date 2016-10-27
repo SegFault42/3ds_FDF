@@ -10,7 +10,7 @@ void	draw_y_line(t_env *env)
 {
 	int		x = 0;
 	int		y = 0;
-	char	r = 100, g = 0, b = 100;
+	char	r = 0, g = 204, b = 0;
 	int		x1 = 0;
 	int		x2 = 0;
 	int		y1 = 0;
@@ -19,7 +19,7 @@ void	draw_y_line(t_env *env)
 
 	while (y < env->y_point)
 	{
-		x1 = (x * env->gap) - (y * env->gap) + 200 ;
+		x1 = (x * env->gap) - (y * env->gap) + 200;
 		if ((y + 1) < env->y_point)
 			y1 = ((x * env->gap) + (y * env->gap) / iso + 0 + env->gap / iso) - (env->map[y][x] * env->level);
 		else
@@ -29,7 +29,7 @@ void	draw_y_line(t_env *env)
 			x2 = (x * env->gap) - (y * env->gap) + 200;
 			y2 = ((x * env->gap) + (y * env->gap) / iso + 0 + env->gap / iso) - (env->map[y][x] * env->level);
 			sf2d_draw_line(x1, y1, x2, y2, 2, RGBA8(r, g, b, 255)); // draw all line.
-			/*sf2d_draw_rectangle(x1, y1, 1, 1, RGBA8(255, 0, 0, 255)); // draw all point.*/
+			sf2d_draw_rectangle(x1, y1, 1, 1, RGBA8(255, 0, 0, 255)); // draw all point.
 			x1 = x2;
 			y1 = y2;
 			x++;
@@ -48,7 +48,7 @@ void	draw_x_line(t_env *env)
 {
 	int		x = 0;
 	int		y = 0;
-	char	r = 100, g = 0, b = 100;
+	char	r = 0, g = 204, b = 0;
 	int		x1 = 0;
 	int		x2 = 0;
 	int		y1 = 0;
@@ -67,7 +67,7 @@ void	draw_x_line(t_env *env)
 			x2 = (x * env->gap) - (y * env->gap) + 200;
 			y2 = ((x * env->gap) + (y * env->gap) / iso + 0 + env->gap / iso) - (env->map[y][x] * env->level);
 			sf2d_draw_line(x1, y1, x2, y2, 2, RGBA8(r, g, b, 255)); // draw all line.
-			/*sf2d_draw_rectangle(x1, y1, 1, 1, RGBA8(255, 0, 0, 255)); // draw all point.*/
+			sf2d_draw_rectangle(x1, y1, 1, 1, RGBA8(255, 0, 0, 255)); // draw all point.
 			x1 = x2;
 			y1 = y2;
 			y++;

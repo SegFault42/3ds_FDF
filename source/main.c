@@ -18,7 +18,7 @@ static void	init_t_fdf_struct(t_env *env)
 	env->level = 1;
 	env->origin_x = ORIGIN_X;
 	env->origin_y = ORIGIN_Y;
-	return ;
+	env->draw = EXIT_FAILURE;
 }
 
 
@@ -51,6 +51,7 @@ int		parse_map(t_env *env)
 		{
 			printf("Map size error\n");
 			close(fd);
+			ft_tab_free(split_line);
 			free(map_name);
 			return (EXIT_FAILURE);
 		}
@@ -59,15 +60,9 @@ int		parse_map(t_env *env)
 		++env->y_point;
 		i = 0;
 		free(line);
-		while (split_line[i])
-		{
-			free(split_line[i]);
-			++i;
-		}
-		free(split_line);
-		i = 0;
 	}
 	close(fd);
+	ft_tab_free(split_line);
 	free(map_name);
 	return (EXIT_SUCCESS);
 }
@@ -103,12 +98,7 @@ void	get_z_point(t_env *env)
 		j = 0;
 		++i;
 		free(line);
-		while (split_line[i_split])
-		{
-			free(split_line[i_split]);
-			++i_split;
-		}
-		free(split_line);
+		ft_tab_free(split_line);
 		i_split = 0;
 	}
 }
@@ -119,124 +109,39 @@ int main()
 	t_env			env;
 	u32				k_held;
 	u32				k_down;
-	int				draw = EXIT_FAILURE;
 
 	init_t_fdf_struct(&env);
 	sf2d_init_advanced(SF2D_GPUCMD_DEFAULT_SIZE, SF2D_TEMPPOOL_DEFAULT_SIZE);
 	sf2d_set_3D(0);
-	sf2d_set_clear_color(RGBA8(0x0, 0x00, 0x00, 0xFF));
+	sf2d_set_clear_color(RGBA8(64, 64, 64, 255));
 	consoleInit(GFX_BOTTOM, &bot_screen); //Init bottom screen
 
 	get_maps(&env);
-	/*print_tab(&env);*/
 
 	while (aptMainLoop())
 	{
 		hidScanInput();
 		k_held = hidKeysHeld();
 		k_down = hidKeysDown();
-		if (k_held & KEY_CSTICK_UP)
-		{
-			env.gap++;
-			env.level++;
-			if (env.gap <= 0)
-			{
-				env.gap = 1;
-				env.level == env.gap - 8;
-			}
-			if (env.level <= 1)
-				env.level = 1;
-		}
-		if (k_held & KEY_CSTICK_DOWN)
-		{
-			env.gap--;
-			env.level--;
-			if (env.gap <= 0)
-			{
-				env.gap = 1;
-				env.level == env.gap - 8;
-			}
-			if (env.level <= 1)
-				env.level = 1;
-		}
-
-		if (k_held & KEY_CPAD_LEFT)
-		{
-			env.x1 -= env.speed;
-			env.x2 -= env.speed;
-		}
-		if (k_held & KEY_CPAD_RIGHT)
-		{
-			env.x1 += env.speed;
-			env.x2 += env.speed;
-		}
-		if (k_held & KEY_CPAD_UP)
-		{
-			env.y1 -= env.speed;
-			env.y2 -= env.speed;
-		}
-		if (k_held & KEY_CPAD_DOWN)
-		{
-			env.y1 += env.speed;
-			env.y2 += env.speed;
-		}
-
+	//=====================================Button==============================
+		c_stick(&env, &k_held);
+		c_pad(&env, &k_held);
+		d_pad(&env, &k_down);
+		button(&env, &k_down);
+		key_up(&env, &k_down);
 		if (k_held & KEY_START)
 			break;
-		if (k_down & KEY_ZR)
-			env.level++;
-		if (k_down & KEY_ZL)
-			env.level--;
-		if (k_down & KEY_DRIGHT)
-		{
-			consoleClear();
-			env.left_or_right = 1;
-			select_map(&env);
-		}
-		if (k_down & KEY_DLEFT)
-		{
-			consoleClear();
-			env.left_or_right = 0;
-			select_map(&env);
-		}
-		if (k_down & KEY_A)
-		{
-			draw = parse_map(&env);
-			get_z_point(&env);
-		}
-
-		if (k_down & KEY_R)
-		{
-			consoleClear();
-			printf("%d\n", env.speed);
-			env.speed++;
-			if (env.speed <= 0)
-				env.speed = 1;
-		}
-		if (k_down & KEY_L)
-		{
-			consoleClear();
-			printf("%d\n", env.speed);
-			env.speed--;
-			if (env.speed <= 0)
-				env.speed = 1;
-		}
-
-		if (draw == EXIT_SUCCESS)
+	//=========================================================================
+		if (env.draw == EXIT_SUCCESS)
 		{
 			sf2d_start_frame(GFX_TOP, GFX_LEFT);
 				draw_y_line(&env);
 				draw_x_line(&env);
 			sf2d_end_frame();
-
-			/*sf2d_start_frame(GFX_TOP, GFX_RIGHT);*/
-				/*draw_y_line(&env);*/
-				/*draw_x_line(&env);*/
-			/*sf2d_end_frame();*/
 		}
-
 		sf2d_swapbuffers();
-		sf2d_set_clear_color(RGBA8(0x10, 0x10, 0x10, 0xFF));
+		sf2d_set_clear_color(RGBA8(64, 64, 64, 255));
+		printf("fps = %2.f\r", sf2d_get_fps());
 	}
 	sf2d_fini();
 	return 0;

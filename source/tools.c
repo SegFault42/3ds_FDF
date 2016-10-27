@@ -23,3 +23,12 @@ void	select_map(t_env *env)
 		env->iter_tab = 0;
 	printf(BRED"%s\n"END, env->tab[env->iter_tab]);
 }
+
+void	ft_tab_free(char **tab)
+{
+	int	i = 0;
+
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
+}
