@@ -1,5 +1,13 @@
 #include "../include/fdf.h"
 
+/*
+** mode = 0 : zoom
+** mode = 1 : Red color
+** mode = 2 : Green color
+** mode = 3 : Blue color
+** mode = 4 : iso
+*/
+
 static void	init_t_fdf_struct(t_env *env)
 {
 	env->tab = NULL;
@@ -19,8 +27,12 @@ static void	init_t_fdf_struct(t_env *env)
 	env->origin_x = ORIGIN_X;
 	env->origin_y = ORIGIN_Y;
 	env->draw = EXIT_FAILURE;
+	env->mode = 0;
+	env->r = 255;
+	env->g = 0;
+	env->b = 0;
+	env->iso = 2;
 }
-
 
 int		parse_map(t_env *env)
 {
@@ -28,7 +40,7 @@ int		parse_map(t_env *env)
 	char	*map_name = NULL;
 	char	*line = NULL;
 	int		i = 0;
-	char	**split_line;
+	char	**split_line = NULL;
 
 	//==========================get_map_name===================================
 	// Alloc size for name path (./Maps/) and map name.
@@ -60,9 +72,9 @@ int		parse_map(t_env *env)
 		++env->y_point;
 		i = 0;
 		free(line);
+		ft_tab_free(split_line);
 	}
 	close(fd);
-	ft_tab_free(split_line);
 	free(map_name);
 	return (EXIT_SUCCESS);
 }

@@ -67,6 +67,11 @@ typedef struct		s_env
 	int				origin_x;
 	int				origin_y;
 	int				draw;
+	int				mode;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+	int				iso;
 }					t_env;
 
 void	get_maps(t_env *env);
@@ -85,15 +90,17 @@ void	ft_tab_free(char **tab);
 void	c_stick(t_env *env, u32 *k_held);
 void	c_pad(t_env *env, u32 *k_held);
 void	d_pad(t_env *env, u32 *k_down);
-int		button(t_env *env, u32 *k_down);
+void	button(t_env *env, u32 *k_down);
 void	key_up(t_env *env, u32 *k_down);
 //====================================libft.c==================================
-char		*ft_strsub(char const *s, unsigned int start, size_t len);
-char		**ft_strsplit(char const *s, char c);
-char		*ft_strnew(size_t size);
-char		*ft_strjoin(char const *s1, char const *s2);
-char		*ft_strsub(char const *s, unsigned int start, size_t len);
-int			get_next_line(int const fd, char **line);
+char	*ft_strsub(char const *s, unsigned int start, size_t len);
+char	**ft_strsplit(char const *s, char c);
+char	*ft_strnew(size_t size);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strsub(char const *s, unsigned int start, size_t len);
+int		get_next_line(int const fd, char **line);
 //=============================================================================
+int		parse_map(t_env *env);
+int		get_z_point(t_env *env);
 
 #endif
