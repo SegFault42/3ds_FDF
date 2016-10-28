@@ -12,13 +12,6 @@
 
 #include "../include/fdf.h"
 
-char		*ft_strsub(char const *s, unsigned int start, size_t len);
-static void	ft_split_count(char const *s, char c, int *j);
-static void	ft_split_tab(char const *s, char **str, char c, int *j);
-char		**ft_strsplit(char const *s, char c);
-char		*ft_strnew(size_t size);
-char		*ft_strjoin(char const *s1, char const *s2);
-char		*ft_strsub(char const *s, unsigned int start, size_t len);
 
 static void	ft_split_count(char const *s, char c, int *j)
 {

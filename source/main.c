@@ -67,15 +67,12 @@ int		parse_map(t_env *env)
 	return (EXIT_SUCCESS);
 }
 
-void	get_z_point(t_env *env)
+int	get_z_point(t_env *env)
 {
-	int		fd;
-	char	**split_line;
-	int		i = 0;
-	int		j = 0;
-	int		i_split = 0;
-	char	*line;
+	int		fd, i = 0, j = 0;
+	char	*line = NULL;
 	char	*map_name = NULL;
+	char	**split_line = NULL;
 
 	map_name = (char *)malloc(sizeof(char) * (strlen(env->tab[env->iter_tab]) + 7));
 	strcpy(map_name, "./Maps/");
@@ -83,6 +80,7 @@ void	get_z_point(t_env *env)
 	if ((fd = open(map_name, O_RDONLY)) < 0)
 	{
 		printf("Opening map error !\n");
+		free(map_name);
 		return (EXIT_FAILURE);
 	}
 	env->map = (int **)malloc(sizeof(int *) * env->y_point);
@@ -99,8 +97,9 @@ void	get_z_point(t_env *env)
 		++i;
 		free(line);
 		ft_tab_free(split_line);
-		i_split = 0;
 	}
+	free(map_name);
+	return (EXIT_SUCCESS);
 }
 
 int main()
@@ -120,10 +119,10 @@ int main()
 
 	while (aptMainLoop())
 	{
+	//=====================================Button==============================
 		hidScanInput();
 		k_held = hidKeysHeld();
 		k_down = hidKeysDown();
-	//=====================================Button==============================
 		c_stick(&env, &k_held);
 		c_pad(&env, &k_held);
 		d_pad(&env, &k_down);
@@ -132,6 +131,7 @@ int main()
 		if (k_held & KEY_START)
 			break;
 	//=========================================================================
+	//=====================================Draw================================
 		if (env.draw == EXIT_SUCCESS)
 		{
 			sf2d_start_frame(GFX_TOP, GFX_LEFT);
@@ -141,7 +141,8 @@ int main()
 		}
 		sf2d_swapbuffers();
 		sf2d_set_clear_color(RGBA8(64, 64, 64, 255));
-		printf("fps = %2.f\r", sf2d_get_fps());
+	//=========================================================================
+		printf("fps = %2.f\r", sf2d_get_fps()); // print frame per second
 	}
 	sf2d_fini();
 	return 0;

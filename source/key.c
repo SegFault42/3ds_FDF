@@ -50,6 +50,7 @@ void	c_pad(t_env *env, u32 *k_held)
 		env->y1 += env->speed;
 		env->y2 += env->speed;
 	}
+	printf("x1 = %d\n", env->x1);
 }
 
 void	d_pad(t_env *env, u32 *k_down)
@@ -72,8 +73,8 @@ int		button(t_env *env, u32 *k_down)
 {
 	if (*k_down & KEY_A)
 	{
-		env->draw = parse_map(&env);
-		get_z_point(&env);
+		env->draw = parse_map(env);
+		get_z_point(env);
 	}
 }
 

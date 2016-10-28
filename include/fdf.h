@@ -69,8 +69,6 @@ typedef struct		s_env
 	int				draw;
 }					t_env;
 
-//int		get_next_line(int const fd, char **line);
-
 void	get_maps(t_env *env);
 int		count_file(t_env *env);
 
@@ -89,5 +87,13 @@ void	c_pad(t_env *env, u32 *k_held);
 void	d_pad(t_env *env, u32 *k_down);
 int		button(t_env *env, u32 *k_down);
 void	key_up(t_env *env, u32 *k_down);
+//====================================libft.c==================================
+char		*ft_strsub(char const *s, unsigned int start, size_t len);
+char		**ft_strsplit(char const *s, char c);
+char		*ft_strnew(size_t size);
+char		*ft_strjoin(char const *s1, char const *s2);
+char		*ft_strsub(char const *s, unsigned int start, size_t len);
+int			get_next_line(int const fd, char **line);
+//=============================================================================
 
 #endif
