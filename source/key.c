@@ -76,6 +76,12 @@ void	button(t_env *env, u32 *k_down)
 {
 	if (*k_down & KEY_A)
 	{
+		if (env->map != NULL)
+		{
+			ft_tab_free_int(env->map, env->y_point);
+			/*ft_tab_free(env->tab);*/
+			re_init_t_fdf_struct(env);
+		}
 		env->draw = parse_map(env);
 		get_z_point(env);
 	}

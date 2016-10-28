@@ -8,7 +8,31 @@
 ** mode = 4 : iso
 */
 
-static void	init_t_fdf_struct(t_env *env)
+void	re_init_t_fdf_struct(t_env *env)
+{
+	env->map = NULL;
+	/*env->iter_tab = 0;*/
+	env->left_or_right = 0;
+	env->y_point = 0;
+	env->x_point = 0;
+	env->x1 = 1;
+	env->x2 = 1;
+	env->y1 = 1;
+	env->y2 = 1;
+	env->gap = 1;
+	env->speed = 1;
+	env->level = 1;
+	env->origin_x = ORIGIN_X;
+	env->origin_y = ORIGIN_Y;
+	env->draw = EXIT_FAILURE;
+	env->mode = 0;
+	env->r = 255;
+	env->g = 0;
+	env->b = 0;
+	env->iso = 2;
+}
+
+void	init_t_fdf_struct(t_env *env)
 {
 	env->tab = NULL;
 	env->map = NULL;
@@ -56,9 +80,12 @@ int		parse_map(t_env *env)
 	}
 	while (get_next_line(fd, &line) > 0)
 	{
+		++env->y_point;
 		split_line = ft_strsplit(line, ' ');
-		while (split_line[i])
+		free(line);
+		while (split_line[i] != NULL)
 			++i;
+		ft_tab_free(split_line);
 		if (env->x_point > 0 && env->x_point != i)
 		{
 			printf("Map size error\n");
@@ -69,10 +96,7 @@ int		parse_map(t_env *env)
 		}
 		else
 			env->x_point = i;
-		++env->y_point;
 		i = 0;
-		free(line);
-		ft_tab_free(split_line);
 	}
 	close(fd);
 	free(map_name);
@@ -122,7 +146,7 @@ int main()
 	u32				k_down;
 
 	init_t_fdf_struct(&env);
-	sf2d_init_advanced(SF2D_GPUCMD_DEFAULT_SIZE, SF2D_TEMPPOOL_DEFAULT_SIZE);
+	sf2d_init_advanced(SF2D_GPUCMD_DEFAULT_SIZE * 2, SF2D_TEMPPOOL_DEFAULT_SIZE * 2);
 	sf2d_set_3D(0);
 	sf2d_set_clear_color(RGBA8(64, 64, 64, 255));
 	consoleInit(GFX_BOTTOM, &bot_screen); //Init bottom screen
@@ -156,6 +180,8 @@ int main()
 	//=========================================================================
 		printf("fps = %2.f\r", sf2d_get_fps()); // print frame per second
 	}
+	ft_tab_free_int(env.map, env.y_point);
+	ft_tab_free(env.tab);
 	sf2d_fini();
 	return 0;
 }

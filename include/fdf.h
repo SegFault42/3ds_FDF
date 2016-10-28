@@ -50,7 +50,7 @@
 
 typedef struct		s_env
 {
-	char				**tab;
+	char			**tab;
 	int				**map;
 	int				size_tab;
 	unsigned int	iter_tab;
@@ -86,6 +86,7 @@ void	draw_x_line(t_env *env);
 void	print_tab(t_env *env);
 void	select_map(t_env *env);
 void	ft_tab_free(char **tab);
+void	ft_tab_free_int(int **tab, int nb);
 //=============================================================================
 void	c_stick(t_env *env, u32 *k_held);
 void	c_pad(t_env *env, u32 *k_held);
@@ -102,5 +103,7 @@ int		get_next_line(int const fd, char **line);
 //=============================================================================
 int		parse_map(t_env *env);
 int		get_z_point(t_env *env);
+void	init_t_fdf_struct(t_env *env);
+void	re_init_t_fdf_struct(t_env *env);
 
 #endif
