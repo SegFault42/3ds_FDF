@@ -74,6 +74,7 @@ void	d_pad(t_env *env, u32 *k_down)
 
 void	button(t_env *env, u32 *k_down)
 {
+	printf("\x1b[1;0H");
 	if (*k_down & KEY_A)
 	{
 		if (env->map != NULL)
@@ -92,26 +93,26 @@ void	button(t_env *env, u32 *k_down)
 			env->mode = 0;
 	}
 	if (env->mode == 0)
-		printf("Zoom\r");
+		printf("\x1b[37mZoom\x1b[0m                    \n");
 	else if (env->mode == 1)
-		printf("Red color\r");
+		printf("\x1b[31;1mRed color\x1b[0m                 \n");
 	else if (env->mode == 2)
-		printf("Green color\r");
+		printf("\x1b[32;1mGreen color\x1b[0m                 \n");
 	else if (env->mode == 3)
-		printf("Blue color\r");
+		printf("\x1b[34mBlue color\x1b[0m                  \n");
 	else if (env->mode == 4)
-		printf("iso\r");
+		printf("\x1b[37miso\x1b[0m                         \n");
 }
 
 void	key_up(t_env *env, u32 *k_down)
 {
+	printf("\x1b[4;0H");
 	if (*k_down & KEY_ZR)
 		env->level++;
 	if (*k_down & KEY_ZL)
 		env->level--;
 	if (*k_down & KEY_R)
 	{
-		consoleClear();
 		printf("%d\n", env->speed);
 		env->speed++;
 		if (env->speed <= 0)
@@ -119,10 +120,25 @@ void	key_up(t_env *env, u32 *k_down)
 	}
 	if (*k_down & KEY_L)
 	{
-		consoleClear();
 		printf("%d\n", env->speed);
 		env->speed--;
 		if (env->speed <= 0)
 			env->speed = 1;
 	}
+	printf("Speed : %d                        \n", env->speed);
+}
+
+void	touch_screen(t_env *env, touchPosition *touch, u32 *k_held)
+{
+	u32	touch_x;
+	u32	touch_y;
+
+	touch_x = touch->px;
+	touch_y = touch->py;
+	if (touch_x != 0 && touch_y != 0)
+	{
+		env->origin_x = touch_x;
+		env->origin_y = touch_y;
+	}
+	printf("\x1b[36mx = %03d; y = %03d\x1b[0m", touch_x, touch_y);
 }

@@ -60,10 +60,10 @@ void	init_t_fdf_struct(t_env *env)
 
 int		parse_map(t_env *env)
 {
-	int		fd;
+	u8		fd;
 	char	*map_name = NULL;
 	char	*line = NULL;
-	int		i = 0;
+	u8		i = 0;
 	char	**split_line = NULL;
 
 	//==========================get_map_name===================================
@@ -105,7 +105,7 @@ int		parse_map(t_env *env)
 
 int	get_z_point(t_env *env)
 {
-	int		fd, i = 0, j = 0;
+	u8	fd, i = 0, j = 0;
 	char	*line = NULL;
 	char	*map_name = NULL;
 	char	**split_line = NULL;
@@ -141,9 +141,12 @@ int	get_z_point(t_env *env)
 int main()
 {
 	PrintConsole	bot_screen;
+	touchPosition	touch;
 	t_env			env;
 	u32				k_held;
 	u32				k_down;
+	u32				touch_x;
+	u32				touch_y;
 
 	init_t_fdf_struct(&env);
 	sf2d_init_advanced(SF2D_GPUCMD_DEFAULT_SIZE * 2, SF2D_TEMPPOOL_DEFAULT_SIZE * 2);
@@ -153,10 +156,19 @@ int main()
 
 	get_maps(&env);
 
+	printf("\x1b[0;15H");
+	printf("\x1b[35;1m%s\n\x1b[0m", env.tab[0]);
 	while (aptMainLoop())
 	{
+		printf("\x1b[0;0H");
+		printf("\x1b[29;0Hx = %03d; y = %03d", env.origin_x, env.origin_y);
 	//=====================================Button==============================
 		hidScanInput();
+		hidTouchRead(&touch);
+		if (k_held & KEY_TOUCH)
+		{
+			touch_screen(&env, &touch, &k_held);
+		}
 		k_held = hidKeysHeld();
 		k_down = hidKeysDown();
 		c_stick(&env, &k_held);
@@ -178,10 +190,11 @@ int main()
 		sf2d_swapbuffers();
 		sf2d_set_clear_color(RGBA8(64, 64, 64, 255));
 	//=========================================================================
-		printf("fps = %2.f\r", sf2d_get_fps()); // print frame per second
+		printf("\x1b[3;0H");
+		printf("fps = %2.f\n", sf2d_get_fps()); // print frame per second
 	}
-	ft_tab_free_int(env.map, env.y_point);
-	ft_tab_free(env.tab);
+	/*ft_tab_free_int(env.map, env.y_point);*/
+	/*ft_tab_free(env.tab);*/
 	sf2d_fini();
 	return 0;
 }

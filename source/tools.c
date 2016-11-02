@@ -21,7 +21,8 @@ void	select_map(t_env *env)
 		env->iter_tab = env->size_tab -1;
 	else if (env->iter_tab >= env->size_tab)
 		env->iter_tab = 0;
-	printf(BRED"%s\n"END, env->tab[env->iter_tab]);
+	printf("\x1b[0;15H");
+	printf("\x1b[35;1m%s\n\x1b[0m", env->tab[env->iter_tab]);
 }
 
 void	ft_tab_free_int(int **tab, int nb)

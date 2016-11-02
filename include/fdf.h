@@ -93,6 +93,7 @@ void	c_pad(t_env *env, u32 *k_held);
 void	d_pad(t_env *env, u32 *k_down);
 void	button(t_env *env, u32 *k_down);
 void	key_up(t_env *env, u32 *k_down);
+void	touch_screen(t_env *env, touchPosition *touch, u32 *k_held);
 //====================================libft.c==================================
 char	*ft_strsub(char const *s, unsigned int start, size_t len);
 char	**ft_strsplit(char const *s, char c);
