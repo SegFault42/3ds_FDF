@@ -2,7 +2,7 @@
 
 Still in developement ...
 
-![FDF](https://i.gyazo.com/8815ac2cb66db79fc20212e9bf072ef0.png)
+![FDF](https://i.gyazo.com/add0c7e55ea60b68de107aff014118d0.png)
 
 2D isometric map relief app using LIBSF2D. Thanks xerpi for the lib.
 
